@@ -11,4 +11,4 @@ nom = "^6.1.2"
 
 [[bin]]
 name = "cp1"
-path = "src/cp1.rs"
+path = "src/cp1/main.rs"

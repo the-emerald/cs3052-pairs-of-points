@@ -1,3 +1,6 @@
+pub mod parse;
+pub mod point;
+
 #[cfg(test)]
 mod tests {
     #[test]
