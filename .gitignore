@@ -1,0 +1,8 @@
+target/
+Tests/
+
+# Executables
+cp1
+
+# IntelliJ IDEA
+.idea
