@@ -20,12 +20,9 @@ impl ClosestV1 {
 
 fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Reference: W2 L3
-    // dbg!(points.len());
-    // dbg!(&points);
 
     // Base case: we can't recurse any further
     if points.len() <= 3 {
-        // dbg!("brute force required");
         return find_minimum_bruteforce(points.iter());
     }
 
@@ -33,7 +30,6 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Split points into two sets, lesser and greater
     let length = points.len();
     let (left, right) = quick_select_points(points, length / 2);
-    // dbg!(&left, &right);
     let median = *right.first().unwrap();
 
     // Recursively solve the problem by left and right
@@ -44,16 +40,12 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Get minimum distance
     let minimum = left_minimum.min(right_minimum);
 
-    // dbg!(&left.len(), &right.len());
-
     // Filter out all points not in the "strip", sort by y coordinate.
     let strip = left
         .iter()
         .chain(right.iter())
         .filter(|p| (p.x - median.x).abs() < minimum.distance().0)
         .sorted_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
-
-    // dbg!(strip.clone().collect_vec().len());
 
     let minimum_in_strip = find_minimum_in_strip(strip, minimum.distance());
 
@@ -80,8 +72,6 @@ fn find_minimum_in_strip<'a>(
             minimum_pair = Some(PointPair(*a, *b));
         }
     }
-    // dbg!(minimum_distance);
-
     minimum_pair
 }
 
@@ -90,6 +80,6 @@ fn find_minimum_bruteforce<'a>(points: impl Iterator<Item = &'a Point> + Clone) 
         .combinations(2)
         .map(|x| PointPair(*x[0], *x[1]))
         .sorted_by(|p1, p2| p1.distance().partial_cmp(&p2.distance()).unwrap())
-        .nth(0)
+        .next()
         .unwrap()
 }
