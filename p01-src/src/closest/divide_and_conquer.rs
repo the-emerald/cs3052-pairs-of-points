@@ -1,4 +1,5 @@
 use crate::geometry::{Distance, Point};
+use crate::quick_select::quick_select_points;
 use itertools::Itertools;
 
 #[derive(Clone, Debug)]
@@ -19,11 +20,15 @@ fn find_closest_pair_inner(points: &mut [Point]) -> (&Point, &Point) {
     // Use quickselect to find median point
     // Split points into two sets, lesser and greater
     let length = points.len();
-    let (left, pivot, right) = points.select_nth_unstable_by(length / 2, |fst, snd| {
-        fst.x
-            .partial_cmp(&snd.x)
-            .expect("incredibly cursed f64 found")
-    });
+
+    let (left, pivot, right) = quick_select_points(points, length / 2);
+
+    // TODO: Determine if I'm allowed to use this.
+    // let (left, pivot, right) = points.select_nth_unstable_by(length / 2, |fst, snd| {
+    //     fst.x
+    //         .partial_cmp(&snd.x)
+    //         .expect("incredibly cursed f64 found")
+    // });
 
     // Recursively solve the problem by left and right
     let left_minimum = {

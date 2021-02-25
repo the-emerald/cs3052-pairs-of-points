@@ -14,3 +14,29 @@ impl Point {
         Distance(((x_dist * x_dist) + (y_dist * y_dist)).sqrt())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn points_distance() {
+        let a = Point { x: 0.0, y: 0.0 };
+        let b = Point { x: 3.0, y: 4.0 };
+        assert_eq!(a.distance_to(b), Distance(5_f64))
+    }
+
+    #[test]
+    fn points_distance_same() {
+        let a = Point { x: 0.0, y: 0.0 };
+        let b = a;
+        assert_eq!(a.distance_to(b), Distance(0_f64))
+    }
+
+    #[test]
+    fn points_distance_negative() {
+        let a = Point { x: 0.0, y: 0.0 };
+        let b = Point { x: -3.0, y: -4.0 };
+        assert_eq!(a.distance_to(b), Distance(5_f64))
+    }
+}
