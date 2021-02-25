@@ -45,10 +45,7 @@ fn quick_select_points_inner(mut points: &mut [Point], mut position: usize) {
     }
 }
 
-pub fn quick_select_points(
-    points: &mut [Point],
-    position: usize,
-) -> (&mut [Point], &mut [Point]) {
+pub fn quick_select_points(points: &mut [Point], position: usize) -> (&mut [Point], &mut [Point]) {
     quick_select_points_inner(points, position);
 
     let (left, right) = points.split_at_mut(position);

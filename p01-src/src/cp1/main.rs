@@ -12,7 +12,7 @@ fn main() {
         .expect("could not read stdin");
 
     let mut points = {
-        let (_, points) = parse_stdin(&buffer).unwrap_or_else(|e| bail_error!(e, 1));
+        let (_, points) = parse_stdin(&buffer).unwrap_or_else(|_| bail_error!(1));
         ClosestV1::new(points)
     };
 
