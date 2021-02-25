@@ -89,7 +89,7 @@ fn find_minimum_bruteforce<'a>(points: impl Iterator<Item = &'a Point> + Clone) 
     points
         .combinations(2)
         .map(|x| PointPair(*x[0], *x[1]))
-        .sorted_by(|p1, p2| p2.distance().partial_cmp(&p1.distance()).unwrap())
+        .sorted_by(|p1, p2| p1.distance().partial_cmp(&p2.distance()).unwrap())
         .nth(0)
         .unwrap()
 }
