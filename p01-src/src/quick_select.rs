@@ -48,13 +48,11 @@ fn quick_select_points_inner(mut points: &mut [Point], mut position: usize) {
 pub fn quick_select_points(
     points: &mut [Point],
     position: usize,
-) -> (&mut [Point], &mut Point, &mut [Point]) {
+) -> (&mut [Point], &mut [Point]) {
     quick_select_points_inner(points, position);
 
     let (left, right) = points.split_at_mut(position);
-    let (pivot, right) = right.split_at_mut(1);
-    let pivot = &mut pivot[0];
-    (left, pivot, right)
+    (left, right)
 }
 
 #[cfg(test)]

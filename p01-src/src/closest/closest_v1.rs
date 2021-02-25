@@ -24,7 +24,7 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     dbg!(&points);
 
     // Base case: we can't recurse any further
-    if points.len() <= 4 {
+    if points.len() <= 3 {
         dbg!("brute force required");
         return find_minimum_bruteforce(points.iter());
     }
@@ -32,7 +32,11 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Use quickselect to find median point
     // Split points into two sets, lesser and greater
     let length = points.len();
-    let (left, pivot, right) = quick_select_points(points, length / 2);
+    let (left, right) = quick_select_points(points, length / 2);
+    let pivot = {
+        let l = left.len() - 1;
+        left[l]
+    };
 
     // Recursively solve the problem by left and right
     let left_minimum = find_closest_pair_inner(left);
@@ -43,18 +47,13 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     let minimum = left_minimum.min(right_minimum);
 
     // Filter out all points not in the "strip", sort by y coordinate.
-    let left_filtered = left
+    let strip = left
         .iter()
-        .filter(|p| (pivot.x - minimum.distance().0) <= p.x && p.x <= pivot.x)
+        .chain(right.iter())
+        .filter(|p| (p.x - pivot.x).abs() < minimum.distance().0)
         .sorted_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
 
-    let right_filtered = right
-        .iter()
-        .filter(|p| pivot.x <= p.x && p.x <= (pivot.x + minimum.distance().0))
-        .sorted_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
-
-    // Merge into the strip
-    let strip = left_filtered.chain(right_filtered);
+    dbg!(strip.clone().collect_vec().len());
 
     let minimum_in_strip = find_minimum_in_strip(strip);
 

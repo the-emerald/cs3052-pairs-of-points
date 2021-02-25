@@ -34,8 +34,8 @@ impl PointPair {
     pub fn min(self, other: PointPair) -> PointPair {
         match self.distance().partial_cmp(&other.distance()).unwrap() {
             Ordering::Less => self,
-            Ordering::Equal => other,
-            Ordering::Greater => self,
+            Ordering::Equal => self,
+            Ordering::Greater => other,
         }
     }
 }
