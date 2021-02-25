@@ -16,10 +16,12 @@ fn main() {
         ClosestV1::new(points)
     };
 
-    dbg!(&points);
+    // dbg!(&points);
 
     let closest = points.find_closest_pair();
 
-    dbg!(closest);
-    dbg!(closest.distance());
+    // dbg!(closest);
+    // dbg!(closest.distance());
+
+    println!("{}", closest.distance());
 }

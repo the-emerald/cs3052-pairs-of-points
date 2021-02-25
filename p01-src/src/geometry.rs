@@ -1,7 +1,15 @@
 use std::cmp::Ordering;
+use std::fmt;
+use std::fmt::Formatter;
 
 #[derive(Copy, Clone, Debug, PartialOrd, PartialEq)]
 pub struct Distance(pub f64);
+
+impl fmt::Display for Distance {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "{:.9}", self.0)
+    }
+}
 
 impl Distance {
     pub fn min(self, other: Distance) -> Distance {
