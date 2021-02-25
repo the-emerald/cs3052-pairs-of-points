@@ -11,7 +11,6 @@ fn main() {
         .read_to_string(&mut buffer)
         .unwrap_or_else(|_| bail_error!(1));
 
-
     let mut points = {
         let (_, points) = parse_stdin(&buffer).unwrap_or_else(|_| bail_error!(1));
         ClosestV1::new(points)
@@ -24,5 +23,7 @@ fn main() {
     // dbg!(closest);
     // dbg!(closest.distance());
 
-    println!("{}", closest.distance());
+    unsafe {
+        closest.distance().pretty_print();
+    }
 }

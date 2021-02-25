@@ -33,10 +33,8 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Split points into two sets, lesser and greater
     let length = points.len();
     let (left, right) = quick_select_points(points, length / 2);
-    let pivot = {
-        let l = left.len() - 1;
-        left[l]
-    };
+    // dbg!(&left, &right);
+    let median = *right.first().unwrap();
 
     // Recursively solve the problem by left and right
     let left_minimum = find_closest_pair_inner(left);
@@ -46,23 +44,31 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Get minimum distance
     let minimum = left_minimum.min(right_minimum);
 
+    // dbg!(&left.len(), &right.len());
+
     // Filter out all points not in the "strip", sort by y coordinate.
     let strip = left
         .iter()
         .chain(right.iter())
-        .filter(|p| (p.x - pivot.x).abs() < minimum.distance().0)
+        .filter(|p| (p.x - median.x).abs() < minimum.distance().0)
         .sorted_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
 
     // dbg!(strip.clone().collect_vec().len());
 
-    let minimum_in_strip = find_minimum_in_strip(strip);
+    let minimum_in_strip = find_minimum_in_strip(strip, minimum.distance());
 
-    (minimum_in_strip).min(minimum)
+    match minimum_in_strip {
+        Some(m) => m,
+        None => minimum,
+    }
 }
 
-fn find_minimum_in_strip<'a>(points: impl Iterator<Item = &'a Point> + Clone) -> PointPair {
-    let mut minimum_distance = Distance(f64::MAX);
-    let mut minimum_pair = (None, None);
+fn find_minimum_in_strip<'a>(
+    points: impl Iterator<Item = &'a Point> + Clone,
+    current_minimum: Distance,
+) -> Option<PointPair> {
+    let mut minimum_distance = current_minimum;
+    let mut minimum_pair: Option<PointPair> = None;
 
     let mut sub_iter = points.clone().fuse();
     for (a, b) in points.flat_map(move |x| {
@@ -71,12 +77,12 @@ fn find_minimum_in_strip<'a>(points: impl Iterator<Item = &'a Point> + Clone) ->
     }) {
         if a.distance_to(*b) < minimum_distance {
             minimum_distance = a.distance_to(*b);
-            minimum_pair = (Some(a), Some(b));
+            minimum_pair = Some(PointPair(*a, *b));
         }
     }
     // dbg!(minimum_distance);
 
-    PointPair(*minimum_pair.0.unwrap(), *minimum_pair.1.unwrap())
+    minimum_pair
 }
 
 fn find_minimum_bruteforce<'a>(points: impl Iterator<Item = &'a Point> + Clone) -> PointPair {

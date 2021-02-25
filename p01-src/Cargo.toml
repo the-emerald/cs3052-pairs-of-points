@@ -9,6 +9,7 @@ edition = "2018"
 [dependencies]
 nom = "^6.1.2"
 itertools = "^0.10.0"
+libc = "^0.2.86"
 
 [dev-dependencies]
 criterion = "^0.3.4"

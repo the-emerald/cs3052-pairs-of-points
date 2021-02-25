@@ -97,6 +97,7 @@ version = "0.1.0"
 dependencies = [
  "criterion",
  "itertools 0.10.0",
+ "libc",
  "nom",
 ]
 

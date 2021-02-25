@@ -1,19 +1,17 @@
 use std::cmp::Ordering;
-use std::fmt;
-use std::fmt::Formatter;
+use std::ffi::CString;
 
 #[derive(Copy, Clone, Debug, PartialOrd, PartialEq)]
 pub struct Distance(pub f64);
 
-impl fmt::Display for Distance {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{:.9}", self.0)
-    }
-}
-
 impl Distance {
     pub fn min(self, other: Distance) -> Distance {
         Distance(self.0.min(other.0))
+    }
+
+    pub unsafe fn pretty_print(self) -> i32 {
+        let f = CString::new("%.9lg\n").unwrap();
+        libc::printf(f.as_ptr(), self.0)
     }
 }
 
