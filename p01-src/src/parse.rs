@@ -26,7 +26,7 @@ pub fn parse_stdin(input: &str) -> IResult<&str, Vec<Point>> {
     let (input, _) = newline(input)?;
     let (input, points) = many1(point)(input)?;
 
-    if points.len() != points_count as usize {
+    if points.len() != points_count as usize || points.len() < 2 {
         return Err(Error(error::Error::new(
             "number of points",
             ErrorKind::Count,
