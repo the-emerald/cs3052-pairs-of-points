@@ -21,9 +21,11 @@ impl ClosestV1 {
 fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Reference: W2 L3
     dbg!(points.len());
+    dbg!(&points);
 
     // Base case: we can't recurse any further
-    if points.len() <= 3 {
+    if points.len() <= 4 {
+        dbg!("brute force required");
         return find_minimum_bruteforce(points.iter());
     }
 
@@ -79,11 +81,9 @@ fn find_minimum_in_strip<'a>(points: impl Iterator<Item = &'a Point> + Clone) ->
 }
 
 fn find_minimum_bruteforce<'a>(points: impl Iterator<Item = &'a Point> + Clone) -> PointPair {
-    let sub_iter = points.clone();
     points
-        .cartesian_product(sub_iter)
-        .into_iter()
-        .map(|(p1, p2)| PointPair(*p1, *p2))
+        .combinations(2)
+        .map(|x| PointPair(*x[0], *x[1]))
         .sorted_by(|p1, p2| p2.distance().partial_cmp(&p1.distance()).unwrap())
         .nth(0)
         .unwrap()
