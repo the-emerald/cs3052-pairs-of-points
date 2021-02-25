@@ -9,7 +9,8 @@ fn main() {
 
     io::stdin()
         .read_to_string(&mut buffer)
-        .expect("could not read stdin");
+        .unwrap_or_else(|_| bail_error!(1));
+
 
     let mut points = {
         let (_, points) = parse_stdin(&buffer).unwrap_or_else(|_| bail_error!(1));
