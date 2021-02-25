@@ -24,7 +24,7 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
 
     // Base case: we can't recurse any further
     if points.len() <= 3 {
-        return find_minimum_in_strip(points.iter());
+        return find_minimum_bruteforce(points.iter());
     }
 
     // Use quickselect to find median point
@@ -76,4 +76,15 @@ fn find_minimum_in_strip<'a>(points: impl Iterator<Item = &'a Point> + Clone) ->
     dbg!(minimum_distance);
 
     PointPair(*minimum_pair.0.unwrap(), *minimum_pair.1.unwrap())
+}
+
+fn find_minimum_bruteforce<'a>(points: impl Iterator<Item = &'a Point> + Clone) -> PointPair {
+    let sub_iter = points.clone();
+    points
+        .cartesian_product(sub_iter)
+        .into_iter()
+        .map(|(p1, p2)| PointPair(*p1, *p2))
+        .sorted_by(|p1, p2| p2.distance().partial_cmp(&p1.distance()).unwrap())
+        .nth(0)
+        .unwrap()
 }

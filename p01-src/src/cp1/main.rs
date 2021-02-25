@@ -21,4 +21,5 @@ fn main() {
     let closest = points.find_closest_pair();
 
     dbg!(closest);
+    dbg!(closest.distance());
 }
