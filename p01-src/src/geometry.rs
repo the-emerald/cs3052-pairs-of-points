@@ -4,7 +4,7 @@ use std::cmp::Ordering;
 pub struct Distance(pub f64);
 
 impl Distance {
-    pub fn min(self, other: Distance) -> Distance{
+    pub fn min(self, other: Distance) -> Distance {
         Distance(self.0.min(other.0))
     }
 }

@@ -1,8 +1,8 @@
-use std::io;
-use std::io::Read;
-use closest_pairs::parse::parse_stdin;
 use closest_pairs::bail_error;
 use closest_pairs::closest::closest_v1::ClosestV1;
+use closest_pairs::parse::parse_stdin;
+use std::io;
+use std::io::Read;
 
 fn main() {
     let mut buffer = String::new();
@@ -12,10 +12,11 @@ fn main() {
         .expect("could not read stdin");
 
     let mut points = {
-        let (_, points) = parse_stdin(&buffer)
-            .unwrap_or_else(|e| bail_error!(e, 1));
+        let (_, points) = parse_stdin(&buffer).unwrap_or_else(|e| bail_error!(e, 1));
         ClosestV1::new(points)
     };
+
+    dbg!(&points);
 
     let closest = points.find_closest_pair();
 

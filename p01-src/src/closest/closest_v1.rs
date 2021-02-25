@@ -9,9 +9,7 @@ pub struct ClosestV1 {
 
 impl ClosestV1 {
     pub fn new(points: Vec<Point>) -> Self {
-        Self {
-            points
-        }
+        Self { points }
     }
 
     // Entry function
@@ -22,6 +20,12 @@ impl ClosestV1 {
 
 fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Reference: W2 L3
+    dbg!(points.len());
+
+    // Base case: we can't recurse any further
+    if points.len() <= 3 {
+        return find_minimum_in_strip(points.iter());
+    }
 
     // Use quickselect to find median point
     // Split points into two sets, lesser and greater
@@ -55,9 +59,7 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     (minimum_in_strip).min(minimum)
 }
 
-fn find_minimum_in_strip<'a>(
-    points: impl Iterator<Item = &'a Point> + Clone,
-) -> PointPair {
+fn find_minimum_in_strip<'a>(points: impl Iterator<Item = &'a Point> + Clone) -> PointPair {
     let mut minimum_distance = Distance(f64::MAX);
     let mut minimum_pair = (None, None);
 
@@ -71,6 +73,7 @@ fn find_minimum_in_strip<'a>(
             minimum_pair = (Some(a), Some(b));
         }
     }
+    dbg!(minimum_distance);
 
     PointPair(*minimum_pair.0.unwrap(), *minimum_pair.1.unwrap())
 }
