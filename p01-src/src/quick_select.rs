@@ -2,7 +2,7 @@ use crate::geometry::Point;
 use itertools::partition;
 use std::cmp::Ordering;
 
-fn find_pivot(points: &[Point]) -> usize {
+pub fn find_pivot(points: &[Point]) -> usize {
     let f = &points[0];
     let m = &points[(points.len() - 1) / 2];
     let l = &points[points.len() - 1];

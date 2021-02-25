@@ -1,5 +1,13 @@
+use std::cmp::Ordering;
+
 #[derive(Copy, Clone, Debug, PartialOrd, PartialEq)]
 pub struct Distance(pub f64);
+
+impl Distance {
+    pub fn min(self, other: Distance) -> Distance{
+        Distance(self.0.min(other.0))
+    }
+}
 
 #[derive(Copy, Clone, Debug, PartialOrd, PartialEq)]
 pub struct Point {
@@ -12,6 +20,23 @@ impl Point {
         let x_dist = self.x - other.x;
         let y_dist = self.y - other.y;
         Distance(((x_dist * x_dist) + (y_dist * y_dist)).sqrt())
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
+pub struct PointPair(pub Point, pub Point);
+
+impl PointPair {
+    pub fn distance(self) -> Distance {
+        self.0.distance_to(self.1)
+    }
+
+    pub fn min(self, other: PointPair) -> PointPair {
+        match self.distance().partial_cmp(&other.distance()).unwrap() {
+            Ordering::Less => self,
+            Ordering::Equal => other,
+            Ordering::Greater => self,
+        }
     }
 }
 
