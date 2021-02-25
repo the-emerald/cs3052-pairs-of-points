@@ -1,29 +1,23 @@
-use crate::point::Point;
-use nom::multi::many1;
-use nom::{IResult, error};
+use crate::geometry::Point;
+use nom::character::complete::{digit1, space1};
 use nom::combinator::map_res;
-use std::str::FromStr;
-use nom::number::complete::double;
-use nom::character::complete::{space1, digit1};
 use nom::error::ErrorKind;
+use nom::multi::many1;
+use nom::number::complete::double;
 use nom::Err::Error;
+use nom::{error, IResult};
+use std::str::FromStr;
 
 fn point(input: &str) -> IResult<&str, Point> {
     let (input, x) = double(input)?;
     let (input, _) = space1(input)?;
     let (input, y) = double(input)?;
 
-    Ok((input, Point {
-        x,
-        y
-    }))
+    Ok((input, Point { x, y }))
 }
 
 fn number_of_points(input: &str) -> IResult<&str, u64> {
-    map_res(
-        digit1,
-        u64::from_str
-    )(input)
+    map_res(digit1, u64::from_str)(input)
 }
 
 pub fn parse_stdin(input: &str) -> IResult<&str, Vec<Point>> {
@@ -31,7 +25,10 @@ pub fn parse_stdin(input: &str) -> IResult<&str, Vec<Point>> {
     let (input, points) = many1(point)(input)?;
 
     if points.len() != points_count as usize {
-        return Err(Error(error::Error::new("number of points", ErrorKind::Count)));
+        return Err(Error(error::Error::new(
+            "number of points",
+            ErrorKind::Count,
+        )));
     }
 
     Ok((input, points))
