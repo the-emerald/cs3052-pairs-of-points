@@ -7,11 +7,11 @@ use itertools::Itertools;
 use rand::prelude::*;
 use std::time::Duration;
 
-pub fn closest_pair(c: &mut Criterion) {
+pub fn closest_pair_average(c: &mut Criterion) {
     const ITERATIONS: usize = 30;
-    let mut group = c.benchmark_group("closest_pair_of_points");
-
+    let mut group = c.benchmark_group("closest_pair_average");
     let mut rng = StdRng::seed_from_u64(0xC0FF_EE00);
+
     let trials = (10..=ITERATIONS).map(|x| {
         (0_usize..(1.5_f32.powf(x as f32) as usize))
             .map(|_| Point {
@@ -39,7 +39,7 @@ pub fn closest_pair(c: &mut Criterion) {
 
         // Task 3: Sort before starting
         group.bench_with_input(
-            BenchmarkId::new("task_3_1", trial.len()),
+            BenchmarkId::new("task_3_qs", trial.len()),
             &trial,
             move |b, t| {
                 b.iter_batched(
@@ -54,11 +54,60 @@ pub fn closest_pair(c: &mut Criterion) {
     }
 }
 
-pub fn quick_select(c: &mut Criterion) {
-    const ITERATIONS: usize = 35;
-    let mut group = c.benchmark_group("quick_select");
+pub fn closest_pair_worst(c: &mut Criterion) {
+    const ITERATIONS: usize = 30;
+    let mut group = c.benchmark_group("closest_pair_worst");
+    let mut rng = StdRng::seed_from_u64(0xC0FF_EE00);
 
+    let trials = (15..=ITERATIONS).map(|x| {
+        let mut v = (0_usize..(1.5_f32.powf(x as f32) as usize))
+            .map(|xv| Point {
+                x: xv as f64,
+                y: rng.gen::<u64>() as f64,
+            })
+            .collect_vec();
+        v.rotate_right(1);
+        v
+    });
+
+    for trial in trials {
+        // Task 1
+        group.bench_with_input(
+            BenchmarkId::new("task_1", trial.len()),
+            &trial,
+            move |b, t| {
+                b.iter_batched(
+                    || Task1::new(t.clone()),
+                    |mut data| {
+                        data.find_closest_pair();
+                    },
+                    BatchSize::LargeInput,
+                );
+            },
+        );
+
+        // Task 3: Sort before starting
+        group.bench_with_input(
+            BenchmarkId::new("task_3_qs", trial.len()),
+            &trial,
+            move |b, t| {
+                b.iter_batched(
+                    || Task3QuickSort::new(t.clone()),
+                    |mut data| {
+                        data.find_closest_pair();
+                    },
+                    BatchSize::LargeInput,
+                );
+            },
+        );
+    }
+}
+
+pub fn quick_select_average(c: &mut Criterion) {
+    const ITERATIONS: usize = 35;
+    let mut group = c.benchmark_group("quick_select_average");
     let mut rng = StdRng::seed_from_u64(0xDEAD_BEEF);
+
     let trials = (20..=ITERATIONS).map(|x| {
         (0_usize..(1.5_f32.powf(x as f32) as usize))
             .map(|_| Point {
@@ -86,18 +135,54 @@ pub fn quick_select(c: &mut Criterion) {
     }
 }
 
+pub fn quick_select_worst(c: &mut Criterion) {
+    const ITERATIONS: usize = 30;
+    let mut rng = StdRng::seed_from_u64(0xDEAD_BEEF);
+    let mut group = c.benchmark_group("quick_select_worst");
+
+    let trials = (15..=ITERATIONS).map(|x| {
+        let mut v = (0_usize..(1.5_f32.powf(x as f32) as usize))
+            .map(|xv| Point {
+                x: xv as f64,
+                y: rng.gen::<u64>() as f64,
+            })
+            .collect_vec();
+        v.rotate_right(1);
+        v
+    });
+
+    for trial in trials {
+        let m = trial.len() / 2;
+        group.bench_with_input(
+            BenchmarkId::from_parameter(trial.len()),
+            &trial,
+            move |b, t| {
+                b.iter_batched(
+                    || t.clone(),
+                    |mut data| {
+                        quick_select_points(&mut data, m);
+                    },
+                    BatchSize::LargeInput,
+                );
+            },
+        );
+    }
+}
+
 pub fn points_distance(c: &mut Criterion) {
+    let mut rng = StdRng::seed_from_u64(0xBAB5_EED5);
+
     let a = Point {
-        x: rand::random::<u64>() as f64,
-        y: rand::random::<u64>() as f64,
+        x: rng.gen::<u64>() as f64,
+        y: rng.gen::<u64>() as f64,
     };
 
     let b = Point {
-        x: rand::random::<u64>() as f64,
-        y: rand::random::<u64>() as f64,
+        x: rng.gen::<u64>() as f64,
+        y: rng.gen::<u64>() as f64,
     };
 
-    let mut group = c.benchmark_group("points_distance");
+    let mut group = c.benchmark_group("geometry");
 
     group.bench_function("points_distance", |bn| {
         bn.iter(|| a.distance_to(black_box(b)))
@@ -106,8 +191,8 @@ pub fn points_distance(c: &mut Criterion) {
 
 criterion_group! {
     name = benches;
-    config = Criterion::default().measurement_time(Duration::new(20, 0)).warm_up_time(Duration::new(5, 0));
-    targets = points_distance, quick_select, closest_pair
+    config = Criterion::default().measurement_time(Duration::new(20, 0)).warm_up_time(Duration::new(5, 0)).sample_size(50);
+    targets = points_distance, quick_select_average, quick_select_worst, closest_pair_average, closest_pair_worst
 }
 
 criterion_main!(benches);
