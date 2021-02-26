@@ -13,6 +13,8 @@ cp1:
 
 cp3:
 	cargo build --release --bin cp3 -j$(num_threads)
+	cp target/release/cp3 ./
+	chmod a+x cp3
 
 clean:
 	rm -f cp1
