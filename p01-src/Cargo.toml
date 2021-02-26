@@ -13,7 +13,12 @@ libc = "^0.2.86"
 
 [dev-dependencies]
 criterion = "^0.3.4"
+rand = "^0.8.3"
 
 [[bin]]
 name = "cp1"
 path = "src/cp1/main.rs"
+
+[[bench]]
+name = "benchmarks"
+harness = false

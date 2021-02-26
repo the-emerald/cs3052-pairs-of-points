@@ -74,11 +74,11 @@ mod tests {
 
         let (left, right) = quick_select_points(&mut points[..], length / 2);
 
-        dbg!(left);
-        dbg!(right);
-        dbg!(median);
-        // assert!(lesser.iter().all(|x| x <= pivot));
-        // assert!(greater.iter().all(|x| x > pivot));
+        dbg!(&left, &right);
+
+        assert_eq!(*right.first().unwrap(), *median);
+        assert!(left.iter().all(|x| x <= median));
+        assert!(right.iter().skip(1).all(|x| x >= median));
     }
 
     #[test]
@@ -108,10 +108,8 @@ mod tests {
 
         let (left, right) = quick_select_points(&mut points[..], length / 2);
 
-        dbg!(left);
-        dbg!(right);
-        dbg!(median);
-        // assert!(lesser.iter().all(|x| x <= pivot));
-        // assert!(greater.iter().all(|x| x > pivot));
+        assert_eq!(*right.first().unwrap(), *median);
+        assert!(left.iter().all(|x| x <= median));
+        assert!(right.iter().skip(1).all(|x| x >= median));
     }
 }
