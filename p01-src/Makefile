@@ -1,6 +1,6 @@
 default: all
 
-all: cp1
+all: cp1 cp3
 
 # Number of threads to compile the program with.
 # 2 is recommended for building on host servers.
