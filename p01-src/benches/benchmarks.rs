@@ -1,4 +1,5 @@
 use closest_pairs::closest::task_1::Task1;
+use closest_pairs::closest::task_3_1::Task3QuickSort;
 use closest_pairs::geometry::Point;
 use closest_pairs::quick_select::quick_select_points;
 use criterion::{black_box, criterion_group, criterion_main, BatchSize, BenchmarkId, Criterion};
@@ -6,9 +7,9 @@ use itertools::Itertools;
 use rand::prelude::*;
 use std::time::Duration;
 
-pub fn task_1(c: &mut Criterion) {
+pub fn closest_pair(c: &mut Criterion) {
     const ITERATIONS: usize = 30;
-    let mut group = c.benchmark_group("task_1");
+    let mut group = c.benchmark_group("closest_pair_of_points");
 
     let mut rng = StdRng::seed_from_u64(0xC0FF_EE00);
     let trials = (10..=ITERATIONS).map(|x| {
@@ -21,12 +22,28 @@ pub fn task_1(c: &mut Criterion) {
     });
 
     for trial in trials {
+        // Task 1
         group.bench_with_input(
-            BenchmarkId::from_parameter(trial.len()),
+            BenchmarkId::new("task_1", trial.len()),
             &trial,
             move |b, t| {
                 b.iter_batched(
                     || Task1::new(t.clone()),
+                    |mut data| {
+                        data.find_closest_pair();
+                    },
+                    BatchSize::LargeInput,
+                );
+            },
+        );
+
+        // Task 3: Sort before starting
+        group.bench_with_input(
+            BenchmarkId::new("task_3_1", trial.len()),
+            &trial,
+            move |b, t| {
+                b.iter_batched(
+                    || Task3QuickSort::new(t.clone()),
                     |mut data| {
                         data.find_closest_pair();
                     },
@@ -89,8 +106,8 @@ pub fn points_distance(c: &mut Criterion) {
 
 criterion_group! {
     name = benches;
-    config = Criterion::default().measurement_time(Duration::new(10, 0));
-    targets = points_distance, quick_select, task_1
+    config = Criterion::default().measurement_time(Duration::new(20, 0)).warm_up_time(Duration::new(5, 0));
+    targets = points_distance, quick_select, closest_pair
 }
 
 criterion_main!(benches);
