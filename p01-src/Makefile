@@ -17,4 +17,4 @@ cp3:
 	chmod a+x cp3
 
 clean:
-	rm -f cp1
+	rm -f cp1 cp3
