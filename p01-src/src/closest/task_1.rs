@@ -3,11 +3,11 @@ use crate::quick_select::quick_select_points;
 use itertools::Itertools;
 
 #[derive(Clone, Debug)]
-pub struct ClosestV1 {
+pub struct Task1 {
     points: Vec<Point>,
 }
 
-impl ClosestV1 {
+impl Task1 {
     pub fn new(points: Vec<Point>) -> Self {
         Self { points }
     }
