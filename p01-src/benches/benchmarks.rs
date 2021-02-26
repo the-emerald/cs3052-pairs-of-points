@@ -7,12 +7,14 @@ use itertools::Itertools;
 use rand::prelude::*;
 use std::time::Duration;
 
+const CP_MIN: usize = 10;
+const CP_MAX: usize = 30;
+
 pub fn closest_pair_average(c: &mut Criterion) {
-    const ITERATIONS: usize = 30;
     let mut group = c.benchmark_group("closest_pair_average");
     let mut rng = StdRng::seed_from_u64(0xC0FF_EE00);
 
-    let trials = (10..=ITERATIONS).map(|x| {
+    let trials = (CP_MIN..=CP_MAX).map(|x| {
         (0_usize..(1.5_f32.powf(x as f32) as usize))
             .map(|_| Point {
                 x: rng.gen::<u64>() as f64,
@@ -55,11 +57,10 @@ pub fn closest_pair_average(c: &mut Criterion) {
 }
 
 pub fn closest_pair_worst(c: &mut Criterion) {
-    const ITERATIONS: usize = 30;
     let mut group = c.benchmark_group("closest_pair_worst");
     let mut rng = StdRng::seed_from_u64(0xC0FF_EE00);
 
-    let trials = (15..=ITERATIONS).map(|x| {
+    let trials = (CP_MIN..=CP_MAX).map(|x| {
         let mut v = (0_usize..(1.5_f32.powf(x as f32) as usize))
             .map(|xv| Point {
                 x: xv as f64,
@@ -191,7 +192,7 @@ pub fn points_distance(c: &mut Criterion) {
 
 criterion_group! {
     name = benches;
-    config = Criterion::default().measurement_time(Duration::new(20, 0)).warm_up_time(Duration::new(5, 0)).sample_size(50);
+    config = Criterion::default().measurement_time(Duration::new(10, 0)).warm_up_time(Duration::new(3, 0)).sample_size(50);
     targets = points_distance, quick_select_average, quick_select_worst, closest_pair_average, closest_pair_worst
 }
 
