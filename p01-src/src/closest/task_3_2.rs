@@ -41,8 +41,14 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Get minimum distance
     let minimum = left_minimum.min(right_minimum);
 
-    // Sort by y first
-    // points.sort_unstable_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
+    // Merge
+    let mut points_cpy = points.to_vec();
+    merge(
+        &points[0..(length / 2)],
+        &points[(length / 2)..],
+        &mut points_cpy,
+    );
+    points.copy_from_slice(&points_cpy);
 
     // Now filter
     let strip = points
@@ -54,5 +60,29 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     match minimum_in_strip {
         Some(m) => m,
         None => minimum,
+    }
+}
+
+fn merge(left: &[Point], right: &[Point], points: &mut [Point]) {
+    // assert_eq!(left.len() + right.len(), points.len());
+    let (mut i, mut j, mut k) = (0, 0, 0);
+
+    while i < left.len() && j < right.len() {
+        if left[i].y < right[j].y {
+            points[k] = left[i];
+            k += 1;
+            i += 1;
+        } else {
+            points[k] = right[j];
+            k += 1;
+            j += 1;
+        }
+    }
+
+    if i < left.len() {
+        points[k..].copy_from_slice(&left[i..]);
+    }
+    if j < right.len() {
+        points[k..].copy_from_slice(&right[j..]);
     }
 }
