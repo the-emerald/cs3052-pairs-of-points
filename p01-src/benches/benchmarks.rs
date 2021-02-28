@@ -6,6 +6,7 @@ use criterion::{black_box, criterion_group, criterion_main, BatchSize, Benchmark
 use itertools::Itertools;
 use rand::prelude::*;
 use std::time::Duration;
+use closest_pairs::closest::task_3_2::Task3SortedY;
 
 const FACTOR: f32 = 1.5;
 
@@ -43,11 +44,26 @@ pub fn closest_pair_average(c: &mut Criterion) {
 
         // Task 3: Sort before starting
         group.bench_with_input(
-            BenchmarkId::new("task_3_qs", trial.len()),
+            BenchmarkId::new("task_3_sort_first", trial.len()),
             &trial,
             move |b, t| {
                 b.iter_batched(
                     || Task3QuickSort::new(t.clone()),
+                    |mut data| {
+                        data.find_closest_pair();
+                    },
+                    BatchSize::LargeInput,
+                );
+            },
+        );
+
+        // Task 3: Ensure y-sorted
+        group.bench_with_input(
+            BenchmarkId::new("task_3_maintain_y", trial.len()),
+            &trial,
+            move |b, t| {
+                b.iter_batched(
+                    || Task3SortedY::new(t.clone()),
                     |mut data| {
                         data.find_closest_pair();
                     },
@@ -94,11 +110,26 @@ pub fn closest_pair_worst(c: &mut Criterion) {
 
         // Task 3: Sort before starting
         group.bench_with_input(
-            BenchmarkId::new("task_3_qs", trial.len()),
+            BenchmarkId::new("task_3_sort_first", trial.len()),
             &trial,
             move |b, t| {
                 b.iter_batched(
                     || Task3QuickSort::new(t.clone()),
+                    |mut data| {
+                        data.find_closest_pair();
+                    },
+                    BatchSize::LargeInput,
+                );
+            },
+        );
+
+        // Task 3: Ensure y-sorted
+        group.bench_with_input(
+            BenchmarkId::new("task_3_maintain_y", trial.len()),
+            &trial,
+            move |b, t| {
+                b.iter_batched(
+                    || Task3SortedY::new(t.clone()),
                     |mut data| {
                         data.find_closest_pair();
                     },
