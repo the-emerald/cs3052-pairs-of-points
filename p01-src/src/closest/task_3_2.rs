@@ -13,57 +13,53 @@ impl Task3SortedY {
 
     // Entry function
     pub fn find_closest_pair(&mut self) -> PointPair {
-        let mut points_y = self.points.clone();
-        points_y.sort_unstable_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
-
         self.points
             .sort_unstable_by(|a, b| a.x.partial_cmp(&b.x).unwrap());
 
-        find_closest_pair_inner(&mut self.points, &mut points_y)
+        find_closest_pair_inner(&mut self.points)
     }
 }
 
-fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> PointPair {
+fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     // Reference: W2 L3
 
     // Base case: we can't recurse any further
-    if points_x.len() <= 3 {
-        return find_minimum_bruteforce(points_x.iter());
+    if points.len() <= 3 {
+        points.sort_unstable_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
+        return find_minimum_bruteforce(points.iter());
     }
 
     // We have already sorted the entire array
-    let length = points_x.len();
-    let (left_x, right_x) = points_x.split_at_mut(length / 2);
+    let length = points.len();
+    let (left_x, right_x) = points.split_at_mut(length / 2);
     let median = *right_x.first().unwrap();
 
-    // Split
-    let (left_y, right_y) = partition_y_points(points_y, median);
-    let left_y_len = left_y.len();
+    let left_x_len = left_x.len();
 
     // Recursively solve the problem by left and right
-    let left_minimum = find_closest_pair_inner(left_x, left_y);
+    let left_minimum = find_closest_pair_inner(left_x);
 
-    let right_minimum = find_closest_pair_inner(right_x, right_y);
+    let right_minimum = find_closest_pair_inner(right_x);
 
     // Get minimum distance
     let minimum = left_minimum.min(right_minimum);
 
     // Merge
-    let mut points_cpy = points_y.to_vec();
+    let mut points_cpy = points.to_vec();
     merge(
-        &points_y[0..left_y_len],
-        &points_y[left_y_len..],
+        &points[0..left_x_len],
+        &points[left_x_len..],
         &mut points_cpy,
     );
-    points_y.copy_from_slice(&points_cpy);
+    points.copy_from_slice(&points_cpy);
 
     // Check invariant!
     debug_assert!(
-        (0..points_y.len() - 1).all(|i| points_y[i].y <= points_y[i+1].y)
+        (0..points.len() - 1).all(|i| points[i].y <= points[i+1].y)
     );
 
     // Now filter
-    let strip = points_y
+    let strip = points
         .iter()
         .filter(|p| (p.x - median.x).abs() < minimum.distance().0);
 
