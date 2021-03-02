@@ -35,14 +35,12 @@ fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> Po
     let median = *right_x.first().unwrap();
 
     // Split
-    let (mut left_y, mut right_y): (Vec<Point>, Vec<Point>) = points_y
-        .iter()
-        .partition(|p| p.x <= median.x);
+    let (left_y, right_y) = partition_y_points(points_y, median);
 
     // Recursively solve the problem by left and right
-    let left_minimum = find_closest_pair_inner(left_x, &mut left_y);
+    let left_minimum = find_closest_pair_inner(left_x, left_y);
 
-    let right_minimum = find_closest_pair_inner(right_x, &mut right_y);
+    let right_minimum = find_closest_pair_inner(right_x, right_y);
 
     // Get minimum distance
     let minimum = left_minimum.min(right_minimum);
@@ -53,14 +51,14 @@ fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> Po
     );
 
     // Merge
-    // let mut points_cpy = points_y.to_vec();
-    // let length_y = points_cpy.len();
-    // merge(
-    //     &points_y[0..(length_y / 2)],
-    //     &points_y[(length_y / 2)..],
-    //     &mut points_cpy,
-    // );
-    // points_y.copy_from_slice(&points_cpy);
+    let mut points_cpy = points_y.to_vec();
+    let length_y = points_cpy.len();
+    merge(
+        &points_y[0..(length_y / 2)],
+        &points_y[(length_y / 2)..],
+        &mut points_cpy,
+    );
+    points_y.copy_from_slice(&points_cpy);
 
     // Now filter
     let strip = points_y
@@ -76,7 +74,8 @@ fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> Po
 }
 
 fn merge(left: &[Point], right: &[Point], points: &mut [Point]) {
-    // assert_eq!(left.len() + right.len(), points.len());
+    debug_assert_eq!(left.len() + right.len(), points.len());
+
     let (mut i, mut j, mut k) = (0, 0, 0);
 
     while i < left.len() && j < right.len() {
@@ -97,4 +96,23 @@ fn merge(left: &[Point], right: &[Point], points: &mut [Point]) {
     if j < right.len() {
         points[k..].copy_from_slice(&right[j..]);
     }
+}
+
+fn partition_y_points(points: &mut [Point], median: Point) -> (&mut [Point], &mut [Point]) {
+    let mut copied = 0;
+    let mut right = Vec::with_capacity(points.len());
+
+    for i in 0..points.len() {
+        if points[i].x <= median.x {
+            points[copied] = points[i];
+            copied += 1;
+        }
+        else {
+            right.push(points[i]);
+        }
+    }
+
+    points[copied..].copy_from_slice(&right);
+
+    points.split_at_mut(copied)
 }
