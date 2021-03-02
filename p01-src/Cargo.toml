@@ -17,7 +17,7 @@ rand = "^0.8.3"
 
 [profile.release]
 lto = "fat"
-codegen-units = 1
+debug = true
 
 [[bin]]
 name = "cp1"

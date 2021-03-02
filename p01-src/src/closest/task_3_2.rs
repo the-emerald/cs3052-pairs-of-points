@@ -1,6 +1,5 @@
 use crate::closest::{find_minimum_bruteforce, find_minimum_in_strip};
 use crate::geometry::{Point, PointPair};
-use itertools::partition;
 
 #[derive(Clone, Debug)]
 pub struct Task3SortedY {
@@ -27,7 +26,6 @@ fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> Po
 
     // Base case: we can't recurse any further
     if points_x.len() <= 3 {
-        points_x.sort_unstable_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
         return find_minimum_bruteforce(points_x.iter());
     }
 
@@ -37,15 +35,14 @@ fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> Po
     let median = *right_x.first().unwrap();
 
     // Split
-    let (left_y, right_y) = {
-        let pt = partition(points_y.iter_mut(), |p| p.x <= median.x);
-        points_y.split_at_mut(pt)
-    };
+    let (mut left_y, mut right_y): (Vec<Point>, Vec<Point>) = points_y
+        .iter()
+        .partition(|p| p.x <= median.x);
 
     // Recursively solve the problem by left and right
-    let left_minimum = find_closest_pair_inner(left_x, left_y);
+    let left_minimum = find_closest_pair_inner(left_x, &mut left_y);
 
-    let right_minimum = find_closest_pair_inner(right_x, right_y);
+    let right_minimum = find_closest_pair_inner(right_x, &mut right_y);
 
     // Get minimum distance
     let minimum = left_minimum.min(right_minimum);
