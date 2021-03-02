@@ -24,6 +24,10 @@ name = "cp1"
 path = "src/cp1/main.rs"
 
 [[bin]]
+name = "cp3_1"
+path = "src/cp3_1/main.rs"
+
+[[bin]]
 name = "cp3"
 path = "src/cp3/main.rs"
 
