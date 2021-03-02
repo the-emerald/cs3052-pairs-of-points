@@ -48,14 +48,14 @@ fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> Po
     let minimum = left_minimum.min(right_minimum);
 
     // Merge
-    let mut points_cpy = points_y.to_vec();
-    let length_y = points_cpy.len();
-    merge(
-        &points_y[0..(length_y / 2)],
-        &points_y[(length_y / 2)..],
-        &mut points_cpy,
-    );
-    points_y.copy_from_slice(&points_cpy);
+    // let mut points_cpy = points_y.to_vec();
+    // let length_y = points_cpy.len();
+    // merge(
+    //     &points_y[0..(length_y / 2)],
+    //     &points_y[(length_y / 2)..],
+    //     &mut points_cpy,
+    // );
+    // points_y.copy_from_slice(&points_cpy);
 
     // Now filter
     let strip = points_y
