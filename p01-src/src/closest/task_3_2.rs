@@ -47,6 +47,11 @@ fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> Po
     // Get minimum distance
     let minimum = left_minimum.min(right_minimum);
 
+    // Check invariant!
+    debug_assert!(
+        (0..points_y.len() - 1).all(|i| points_y[i].y <= points_y[i+1].y)
+    );
+
     // Merge
     // let mut points_cpy = points_y.to_vec();
     // let length_y = points_cpy.len();

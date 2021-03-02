@@ -10,10 +10,10 @@ edition = "2018"
 nom = "^6.1.2"
 itertools = "^0.10.0"
 libc = "^0.2.86"
+rand = "^0.8.3"
 
 [dev-dependencies]
 criterion = "^0.3.4"
-rand = "^0.8.3"
 
 [profile.release]
 lto = "fat"
@@ -30,6 +30,10 @@ path = "src/cp3_1/main.rs"
 [[bin]]
 name = "cp3"
 path = "src/cp3/main.rs"
+
+[[bin]]
+name = "make_points"
+path = "src/make_points/main.rs"
 
 [[bench]]
 name = "benchmarks"
