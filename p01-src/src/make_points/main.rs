@@ -12,7 +12,7 @@ fn main() {
     let file = File::create(FILE_LOCATION).unwrap();
     let mut bw = BufWriter::new(file);
 
-    write!(&mut bw, "{}\n", SIZE).unwrap();
+    writeln!(&mut bw, "{}", SIZE).unwrap();
 
     (0..SIZE)
         .map(|_| Point {
@@ -20,6 +20,6 @@ fn main() {
             y: rng.gen::<u64>() as f64
         })
         .for_each(|p| {
-            write!(&mut bw, "{:.1} {:.1}\n", p.x, p.y).unwrap();
+            writeln!(&mut bw, "{:.1} {:.1}", p.x, p.y).unwrap();
         })
 }

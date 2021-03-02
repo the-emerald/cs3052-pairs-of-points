@@ -15,8 +15,10 @@ impl Task3SortedY {
     pub fn find_closest_pair(&mut self) -> PointPair {
         let mut points_y = self.points.clone();
         points_y.sort_unstable_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
+
         self.points
             .sort_unstable_by(|a, b| a.x.partial_cmp(&b.x).unwrap());
+
         find_closest_pair_inner(&mut self.points, &mut points_y)
     }
 }
@@ -36,6 +38,7 @@ fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> Po
 
     // Split
     let (left_y, right_y) = partition_y_points(points_y, median);
+    let left_y_len = left_y.len();
 
     // Recursively solve the problem by left and right
     let left_minimum = find_closest_pair_inner(left_x, left_y);
@@ -45,20 +48,19 @@ fn find_closest_pair_inner(points_x: &mut [Point], points_y: &mut [Point]) -> Po
     // Get minimum distance
     let minimum = left_minimum.min(right_minimum);
 
+    // Merge
+    let mut points_cpy = points_y.to_vec();
+    merge(
+        &points_y[0..left_y_len],
+        &points_y[left_y_len..],
+        &mut points_cpy,
+    );
+    points_y.copy_from_slice(&points_cpy);
+
     // Check invariant!
     debug_assert!(
         (0..points_y.len() - 1).all(|i| points_y[i].y <= points_y[i+1].y)
     );
-
-    // Merge
-    let mut points_cpy = points_y.to_vec();
-    let length_y = points_cpy.len();
-    merge(
-        &points_y[0..(length_y / 2)],
-        &points_y[(length_y / 2)..],
-        &mut points_cpy,
-    );
-    points_y.copy_from_slice(&points_cpy);
 
     // Now filter
     let strip = points_y
