@@ -43,9 +43,8 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     let minimum = left_minimum.min(right_minimum);
 
     // Filter out all points not in the "strip", sort by y coordinate.
-    let strip = left
+    let strip = points
         .iter()
-        .chain(right.iter())
         .filter(|p| (p.x - median.x).abs() < minimum.distance().0)
         .sorted_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
 
