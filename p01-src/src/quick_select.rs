@@ -35,11 +35,11 @@ fn quick_select_points_inner(mut points: &mut [Point], mut position: usize) {
                 return;
             }
             Ordering::Greater => {
-                points = &mut { points }[0..split];
+                points = &mut points[0..split];
             }
             Ordering::Less => {
                 position = position - split - 1;
-                points = &mut { points }[(split + 1)..]
+                points = &mut points[(split + 1)..]
             }
         }
     }
@@ -48,8 +48,7 @@ fn quick_select_points_inner(mut points: &mut [Point], mut position: usize) {
 pub fn quick_select_points(points: &mut [Point], position: usize) -> (&mut [Point], &mut [Point]) {
     quick_select_points_inner(points, position);
 
-    let (left, right) = points.split_at_mut(position);
-    (left, right)
+    points.split_at_mut(position)
 }
 
 #[cfg(test)]

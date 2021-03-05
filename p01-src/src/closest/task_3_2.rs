@@ -54,9 +54,7 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     points.copy_from_slice(&points_cpy);
 
     // Check invariant!
-    debug_assert!(
-        (0..points.len() - 1).all(|i| points[i].y <= points[i+1].y)
-    );
+    debug_assert!((0..points.len() - 1).all(|i| points[i].y <= points[i + 1].y));
 
     // Now filter
     let strip = points
@@ -71,13 +69,13 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
     }
 }
 
-fn merge(left: &[Point], right: &[Point], points: &mut [Point]) {
+pub fn merge(left: &[Point], right: &[Point], points: &mut [Point]) {
     debug_assert_eq!(left.len() + right.len(), points.len());
 
     let (mut i, mut j, mut k) = (0, 0, 0);
 
     while i < left.len() && j < right.len() {
-        if left[i].y < right[j].y {
+        if left[i].y <= right[j].y {
             points[k] = left[i];
             k += 1;
             i += 1;
@@ -94,23 +92,4 @@ fn merge(left: &[Point], right: &[Point], points: &mut [Point]) {
     if j < right.len() {
         points[k..].copy_from_slice(&right[j..]);
     }
-}
-
-fn partition_y_points(points: &mut [Point], median: Point) -> (&mut [Point], &mut [Point]) {
-    let mut copied = 0;
-    let mut right = Vec::with_capacity(points.len());
-
-    for i in 0..points.len() {
-        if points[i].x <= median.x {
-            points[copied] = points[i];
-            copied += 1;
-        }
-        else {
-            right.push(points[i]);
-        }
-    }
-
-    points[copied..].copy_from_slice(&right);
-
-    points.split_at_mut(copied)
 }

@@ -1,8 +1,8 @@
 use closest_pairs::bail_error;
+use closest_pairs::closest::task_3_1::Task3QuickSort;
 use closest_pairs::parse::parse_stdin;
 use std::io;
 use std::io::Read;
-use closest_pairs::closest::task_3_1::Task3QuickSort;
 
 fn main() {
     let mut buffer = String::new();

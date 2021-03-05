@@ -20,8 +20,8 @@ pub fn closest_pair_average(c: &mut Criterion) {
     let trials = (ITER_MIN..=ITER_MAX).map(|x| {
         (0_usize..(FACTOR.powf(x as f32) as usize))
             .map(|_| Point {
-                x: rng.gen::<u64>() as f64,
-                y: rng.gen::<u64>() as f64,
+                x: rng.gen::<i64>() as f64,
+                y: rng.gen::<i64>() as f64,
             })
             .collect_vec()
     });
@@ -85,7 +85,7 @@ pub fn closest_pair_worst(c: &mut Criterion) {
         let mut v = (0_usize..(FACTOR.powf(x as f32) as usize))
             .map(|xv| Point {
                 x: xv as f64,
-                y: rng.gen::<u64>() as f64,
+                y: rng.gen::<i64>() as f64,
             })
             .collect_vec();
         v.rotate_right(1);
@@ -148,8 +148,8 @@ pub fn quick_select_average(c: &mut Criterion) {
     let trials = (20..=ITERATIONS).map(|x| {
         (0_usize..(1.5_f32.powf(x as f32) as usize))
             .map(|_| Point {
-                x: rng.gen::<u64>() as f64,
-                y: rng.gen::<u64>() as f64,
+                x: rng.gen::<i64>() as f64,
+                y: rng.gen::<i64>() as f64,
             })
             .collect_vec()
     });
@@ -181,7 +181,7 @@ pub fn quick_select_worst(c: &mut Criterion) {
         let mut v = (0_usize..(1.5_f32.powf(x as f32) as usize))
             .map(|xv| Point {
                 x: xv as f64,
-                y: rng.gen::<u64>() as f64,
+                y: rng.gen::<i64>() as f64,
             })
             .collect_vec();
         v.rotate_right(1);
@@ -210,13 +210,13 @@ pub fn points_distance(c: &mut Criterion) {
     let mut rng = StdRng::seed_from_u64(0xBAB5_EED5);
 
     let a = Point {
-        x: rng.gen::<u64>() as f64,
-        y: rng.gen::<u64>() as f64,
+        x: rng.gen::<i64>() as f64,
+        y: rng.gen::<i64>() as f64,
     };
 
     let b = Point {
-        x: rng.gen::<u64>() as f64,
-        y: rng.gen::<u64>() as f64,
+        x: rng.gen::<i64>() as f64,
+        y: rng.gen::<i64>() as f64,
     };
 
     let mut group = c.benchmark_group("geometry");
