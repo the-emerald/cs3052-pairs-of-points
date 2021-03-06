@@ -59,7 +59,7 @@ impl Mesh {
         if self.get_neighbours_of_mesh(point_mp)
             .iter()
             .map(|p| {
-                self.mesh.entry(*p).or_insert(Vec::new()).clone()   // Unfortunately have to clone here
+                self.mesh.get(p).cloned().unwrap_or_default()
             })
             .any(|hs| hs.len() > 1) {
             PointsInNeighbour::Yes
