@@ -5,6 +5,7 @@ use crate::geometry::{Distance, Point, PointPair};
 pub mod task_1;
 pub mod task_3_1;
 pub mod task_3_2;
+pub mod task_4;
 
 pub(crate) fn find_minimum_in_strip<'a>(
     points: impl Iterator<Item = &'a Point> + Clone,

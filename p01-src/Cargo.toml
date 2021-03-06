@@ -32,6 +32,10 @@ name = "cp3"
 path = "src/cp3/main.rs"
 
 [[bin]]
+name = "cp4"
+path = "src/cp4/main.rs"
+
+[[bin]]
 name = "make_points"
 path = "src/make_points/main.rs"
 
