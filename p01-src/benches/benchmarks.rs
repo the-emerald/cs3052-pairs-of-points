@@ -7,6 +7,7 @@ use criterion::{black_box, criterion_group, criterion_main, BatchSize, Benchmark
 use itertools::Itertools;
 use rand::prelude::*;
 use std::time::Duration;
+use closest_pairs::closest::task_4::Task4;
 
 const FACTOR: f32 = 1.5;
 
@@ -65,6 +66,21 @@ pub fn closest_pair_average(c: &mut Criterion) {
                 b.iter_batched(
                     || Task3SortedY::new(t.clone()),
                     |mut data| {
+                        data.find_closest_pair();
+                    },
+                    BatchSize::LargeInput,
+                );
+            },
+        );
+
+        // Task 4: Simple-Randomised
+        group.bench_with_input(
+            BenchmarkId::new("task_4", trial.len()),
+            &trial,
+            move |b, t| {
+                b.iter_batched(
+                    || Task4::new(t.clone()),
+                    |data| {
                         data.find_closest_pair();
                     },
                     BatchSize::LargeInput,
@@ -131,6 +147,21 @@ pub fn closest_pair_worst(c: &mut Criterion) {
                 b.iter_batched(
                     || Task3SortedY::new(t.clone()),
                     |mut data| {
+                        data.find_closest_pair();
+                    },
+                    BatchSize::LargeInput,
+                );
+            },
+        );
+
+        // Task 4: Simple-Randomised
+        group.bench_with_input(
+            BenchmarkId::new("task_4", trial.len()),
+            &trial,
+            move |b, t| {
+                b.iter_batched(
+                    || Task4::new(t.clone()),
+                    |data| {
                         data.find_closest_pair();
                     },
                     BatchSize::LargeInput,
