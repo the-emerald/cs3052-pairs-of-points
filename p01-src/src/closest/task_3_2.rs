@@ -25,7 +25,7 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
 
     // Base case: we can't recurse any further
     if points.len() <= 3 {
-        points.sort_unstable_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
+        points.sort_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
         return find_minimum_bruteforce(points.iter());
     }
 

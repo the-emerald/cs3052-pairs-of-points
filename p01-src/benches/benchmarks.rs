@@ -259,7 +259,7 @@ pub fn points_distance(c: &mut Criterion) {
 
 criterion_group! {
     name = benches;
-    config = Criterion::default().measurement_time(Duration::new(5, 0)).warm_up_time(Duration::new(3, 0)).sample_size(50);
+    config = Criterion::default().measurement_time(Duration::new(10, 0)).warm_up_time(Duration::new(3, 0)).sample_size(50);
     targets = points_distance, quick_select_average, quick_select_worst, closest_pair_average, closest_pair_worst
 }
 
