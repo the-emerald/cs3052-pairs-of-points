@@ -1,6 +1,6 @@
 default: all
 
-all: cp1 cp3
+all: cp1 cp3 cp4
 
 # Number of threads to compile the program with.
 # 2 is recommended for building on host servers.
@@ -16,5 +16,10 @@ cp3:
 	cp target/release/cp3 ./
 	chmod a+x cp3
 
+cp4:
+	cargo build --release --bin cp4 -j$(num_threads)
+	cp target/release/cp4 ./
+	chmod a+x cp4
+
 clean:
-	rm -f cp1 cp3
+	rm -f cp1 cp3 cp4
