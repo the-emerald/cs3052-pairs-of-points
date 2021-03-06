@@ -4,7 +4,7 @@ use std::fs::File;
 use std::io::{BufWriter, Write};
 
 const SIZE: usize = 5_000_000;
-const SEED: u64 = 0x456D_6D79;
+const SEED: u64 = 0xABAB_BABA;
 const FILE_LOCATION: &str = "../stacs/testing.in";
 
 fn main() {

@@ -17,7 +17,7 @@ criterion = "^0.3.4"
 
 [profile.release]
 lto = "fat"
-debug = true
+#debug = true
 
 [[bin]]
 name = "cp1"
