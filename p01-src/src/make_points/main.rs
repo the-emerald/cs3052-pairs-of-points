@@ -3,7 +3,7 @@ use rand::prelude::*;
 use std::fs::File;
 use std::io::{BufWriter, Write};
 
-const SIZE: usize = 5_000_000;
+const SIZE: usize = 10_000_000;
 const SEED: u64 = 0xABAB_BABA;
 const FILE_LOCATION: &str = "../stacs/testing.in";
 

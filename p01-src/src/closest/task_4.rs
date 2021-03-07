@@ -88,8 +88,8 @@ impl Mesh {
             MeshPoint { xth: cx+1, yth: cy },
 
             MeshPoint { xth: cx-1, yth: cy-1 },
-            MeshPoint { xth: cx, yth: cy },
-            MeshPoint { xth: cx+1, yth: cy+1 },
+            MeshPoint { xth: cx, yth: cy-1 },
+            MeshPoint { xth: cx+1, yth: cy-1 },
         ]
     }
 
@@ -140,7 +140,7 @@ impl Task4 {
                 .collect();
 
             // Stop when empty
-            if points_filtering.len() == 0 {
+            if points_filtering.len() < 2 {
                 break;
             }
         }
