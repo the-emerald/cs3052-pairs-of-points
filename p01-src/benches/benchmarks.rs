@@ -16,7 +16,7 @@ pub fn closest_pair_average(c: &mut Criterion) {
     const ITER_MAX: usize = 30;
 
     let mut group = c.benchmark_group("closest_pair_average");
-    let mut rng = StdRng::seed_from_u64(0xC0FF_EE00);
+    let mut rng = StdRng::seed_from_u64(0xC0DE_BEEF);
 
     let trials = (ITER_MIN..=ITER_MAX).map(|x| {
         (0_usize..(FACTOR.powf(x as f32) as usize))
@@ -95,7 +95,7 @@ pub fn closest_pair_worst(c: &mut Criterion) {
     const ITER_MAX: usize = 25;
 
     let mut group = c.benchmark_group("closest_pair_worst");
-    let mut rng = StdRng::seed_from_u64(0xC0FF_EE00);
+    let mut rng = StdRng::seed_from_u64(0xC0DE_BEEF);
 
     let trials = (ITER_MIN..=ITER_MAX).map(|x| {
         let mut v = (0_usize..(FACTOR.powf(x as f32) as usize))
