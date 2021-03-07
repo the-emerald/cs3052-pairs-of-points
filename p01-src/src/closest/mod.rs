@@ -17,7 +17,7 @@ pub(crate) fn find_minimum_in_strip<'a>(
     let mut sub_iter = points.clone().fuse();
     for (a, b) in points.flat_map(move |x| {
         sub_iter.next();
-        std::iter::repeat(x).zip(sub_iter.clone())
+        std::iter::repeat(x).zip(sub_iter.clone().take_while(move |&&p| (p.y - x.y) < minimum_distance.0))
     }) {
         if a.distance_to(*b) < minimum_distance {
             minimum_distance = a.distance_to(*b);
