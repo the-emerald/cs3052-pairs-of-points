@@ -4,17 +4,19 @@ use crate::closest;
 use crate::geometry::{Point, PointPair};
 use crate::quick_select::quick_select_points;
 
+/// Task 1: Divide and conquer using QuickSelect
 #[derive(Clone, Debug)]
 pub struct Task1 {
     points: Vec<Point>,
 }
 
 impl Task1 {
+    /// Create a new `Task1` struct.
     pub fn new(points: Vec<Point>) -> Self {
         Self { points }
     }
 
-    // Entry function
+    /// Find the closest pair of points in the list.
     pub fn find_closest_pair(&mut self) -> PointPair {
         find_closest_pair_inner(&mut self.points)
     }
@@ -48,9 +50,8 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
         .filter(|p| (p.x - median.x).abs() < minimum.distance().0)
         .sorted_by(|a, b| a.y.partial_cmp(&b.y).unwrap());
 
-    let minimum_in_strip = closest::find_minimum_in_strip(strip, minimum.distance());
-
-    match minimum_in_strip {
+    // Return the new minimum if the strip had a better value
+    match closest::find_minimum_in_strip(strip, minimum.distance()) {
         Some(m) => m,
         None => minimum,
     }

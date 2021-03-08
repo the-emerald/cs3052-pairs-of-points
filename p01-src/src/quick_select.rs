@@ -2,6 +2,10 @@ use crate::geometry::Point;
 use itertools::partition;
 use std::cmp::Ordering;
 
+/// Finds a pivot using the median-of-three strategy.
+///
+/// From the slice `points` provided, this function picks the median value of the first, middle and
+/// last Point and returns the index of the chosen pivot.
 pub fn find_pivot(points: &[Point]) -> usize {
     let f = &points[0];
     let m = &points[(points.len() - 1) / 2];
@@ -19,6 +23,7 @@ pub fn find_pivot(points: &[Point]) -> usize {
     }
 }
 
+/// This is the inner function that performs the QuickSelect
 fn quick_select_points_inner(mut points: &mut [Point], mut position: usize) {
     loop {
         let split = {
@@ -45,6 +50,11 @@ fn quick_select_points_inner(mut points: &mut [Point], mut position: usize) {
     }
 }
 
+/// Performs QuickSelect on a list of points.
+///
+/// Given the list `points` and a `position`, the algorithm
+/// will rearrange elements such that the nth largest element is in position specified, such that all
+/// elements larger than it are on the right, and all elements smaller than it are on the left.
 pub fn quick_select_points(points: &mut [Point], position: usize) -> (&mut [Point], &mut [Point]) {
     quick_select_points_inner(points, position);
 

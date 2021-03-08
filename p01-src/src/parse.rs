@@ -8,6 +8,7 @@ use nom::Err::Error;
 use nom::{error, IResult};
 use std::str::FromStr;
 
+/// Parse a point
 fn point(input: &str) -> IResult<&str, Point> {
     let (input, x) = double(input)?;
     let (input, _) = space1(input)?;
@@ -17,10 +18,12 @@ fn point(input: &str) -> IResult<&str, Point> {
     Ok((input, Point { x, y }))
 }
 
+/// Parse the number of points
 fn number_of_points(input: &str) -> IResult<&str, u64> {
     map_res(digit1, u64::from_str)(input)
 }
 
+/// Parse an input from stdin as specified by the specs.
 pub fn parse_stdin(input: &str) -> IResult<&str, Vec<Point>> {
     let (input, points_count) = number_of_points(input)?;
     let (input, _) = newline(input)?;
