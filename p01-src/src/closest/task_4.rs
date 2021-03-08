@@ -1,12 +1,12 @@
-use crate::geometry::{Point, PointPair, Distance};
+use crate::geometry::{Distance, Point, PointPair};
 use rand::prelude::*;
-use std::collections::{HashMap};
+use std::collections::HashMap;
 
 /// A single mesh, indexed by its position along the `x` and `y` axis.
 #[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
 pub struct MeshPoint {
     xth: isize,
-    yth: isize
+    yth: isize,
 }
 
 /// A collection of meshes with a defined edge-to-edge size.
@@ -16,7 +16,7 @@ pub struct MeshPoint {
 /// closest index.
 pub struct Mesh {
     size: f64,
-    mesh: HashMap<MeshPoint, Vec<Point>>
+    mesh: HashMap<MeshPoint, Vec<Point>>,
 }
 
 impl Mesh {
@@ -27,7 +27,7 @@ impl Mesh {
         debug_assert!(size > 0.0);
         Self {
             size,
-            mesh: HashMap::new()
+            mesh: HashMap::new(),
         }
     }
 
@@ -59,24 +59,29 @@ impl Mesh {
     pub fn closest_pair_to_point_in_neighbour(&self, point: Point) -> Option<PointPair> {
         let point_mp = self.get_meshpoint_of_point(point);
 
-        let closest = self.get_neighbours_of_mesh(point_mp).iter()
-            .flat_map(|p| {
-                self.mesh.get(p).cloned().unwrap_or_default()
-            })
+        let closest = self
+            .get_neighbours_of_mesh(point_mp)
+            .iter()
+            .flat_map(|p| self.mesh.get(p).cloned().unwrap_or_default())
             .filter(|&p| p != point)
-            .min_by(|a, b| a.distance_to(point).0.partial_cmp(&b.distance_to(point).0).unwrap());
+            .min_by(|a, b| {
+                a.distance_to(point)
+                    .0
+                    .partial_cmp(&b.distance_to(point).0)
+                    .unwrap()
+            });
 
         closest.map(|p| PointPair(point, p))
     }
 
     /// Checks whether a neighbourhood is populated, given a single mesh.
     fn neighbour_is_populated(&mut self, point_mp: MeshPoint) -> PointsInNeighbour {
-        if self.get_neighbours_of_mesh(point_mp)
+        if self
+            .get_neighbours_of_mesh(point_mp)
             .iter()
-            .map(|p| {
-                self.mesh.get(p).cloned().unwrap_or_default()
-            })
-            .any(|hs| hs.len() > 1) {
+            .map(|p| self.mesh.get(p).cloned().unwrap_or_default())
+            .any(|hs| hs.len() > 1)
+        {
             PointsInNeighbour::Yes
         } else {
             PointsInNeighbour::No
@@ -87,7 +92,7 @@ impl Mesh {
     fn get_meshpoint_of_point(&self, point: Point) -> MeshPoint {
         MeshPoint {
             xth: (point.x / self.size).floor() as isize,
-            yth: (point.y / self.size).floor() as isize
+            yth: (point.y / self.size).floor() as isize,
         }
     }
 
@@ -96,20 +101,41 @@ impl Mesh {
         let MeshPoint { xth: cx, yth: cy } = meshpoint;
 
         [
-            MeshPoint { xth: cx-1, yth: cy+1 },
-            MeshPoint { xth: cx, yth: cy+1 },
-            MeshPoint { xth: cx+1, yth: cy+1 },
-
-            MeshPoint { xth: cx-1, yth: cy },
+            MeshPoint {
+                xth: cx - 1,
+                yth: cy + 1,
+            },
+            MeshPoint {
+                xth: cx,
+                yth: cy + 1,
+            },
+            MeshPoint {
+                xth: cx + 1,
+                yth: cy + 1,
+            },
+            MeshPoint {
+                xth: cx - 1,
+                yth: cy,
+            },
             MeshPoint { xth: cx, yth: cy },
-            MeshPoint { xth: cx+1, yth: cy },
-
-            MeshPoint { xth: cx-1, yth: cy-1 },
-            MeshPoint { xth: cx, yth: cy-1 },
-            MeshPoint { xth: cx+1, yth: cy-1 },
+            MeshPoint {
+                xth: cx + 1,
+                yth: cy,
+            },
+            MeshPoint {
+                xth: cx - 1,
+                yth: cy - 1,
+            },
+            MeshPoint {
+                xth: cx,
+                yth: cy - 1,
+            },
+            MeshPoint {
+                xth: cx + 1,
+                yth: cy - 1,
+            },
         ]
     }
-
 }
 
 /// Whether a point had any neighbour
@@ -117,7 +143,7 @@ pub enum PointsInNeighbour {
     /// Yes
     Yes,
     /// No (it was alone)
-    No
+    No,
 }
 
 /// Task 3 (1): A randomised algorithm as devised by Khuller, Matias 2009.
@@ -125,7 +151,6 @@ pub enum PointsInNeighbour {
 pub struct Task4 {
     points: Vec<Point>,
 }
-
 
 impl Task4 {
     /// Create a new `Task4` struct.
@@ -155,11 +180,9 @@ impl Task4 {
             // Add points to mesh, remove points that are alone in their neighbourhood
             points_filtering = points_filtering
                 .into_iter()
-                .filter(|p| {
-                    match mesh.add_point(*p) {
-                        PointsInNeighbour::Yes => true,
-                        PointsInNeighbour::No => false
-                    }
+                .filter(|p| match mesh.add_point(*p) {
+                    PointsInNeighbour::Yes => true,
+                    PointsInNeighbour::No => false,
                 })
                 .collect();
 
@@ -177,15 +200,24 @@ impl Task4 {
             mesh.add_point_unchecked(*point);
         }
 
-        self.points.iter()
+        self.points
+            .iter()
             .filter_map(|p| mesh.closest_pair_to_point_in_neighbour(*p))
-            .min_by(|a, b| a.distance().partial_cmp(&b.distance()).unwrap()).unwrap()
+            .min_by(|a, b| a.distance().partial_cmp(&b.distance()).unwrap())
+            .unwrap()
     }
 
     fn minimum_distance_to(points: &[Point], point: Point) -> Distance {
-        let min_point = points.iter()
+        let min_point = points
+            .iter()
             .filter(|&&p| p != point)
-            .min_by(|a, b| a.distance_to(point).0.partial_cmp(&b.distance_to(point).0).unwrap()).unwrap();
+            .min_by(|a, b| {
+                a.distance_to(point)
+                    .0
+                    .partial_cmp(&b.distance_to(point).0)
+                    .unwrap()
+            })
+            .unwrap();
         min_point.distance_to(point)
     }
 }

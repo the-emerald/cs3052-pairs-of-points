@@ -29,7 +29,11 @@ pub fn find_minimum_in_strip<'a>(
         // Do not take the item we're on (skip 1)
         sub_iter.next();
         // Repeat the current point, plus the next N items until out of bounds of strip
-        std::iter::repeat(x).zip(sub_iter.clone().take_while(move |&&p| (p.y - x.y) < minimum_distance.0))
+        std::iter::repeat(x).zip(
+            sub_iter
+                .clone()
+                .take_while(move |&&p| (p.y - x.y) < minimum_distance.0),
+        )
     }) {
         if a.distance_to(*b) < minimum_distance {
             minimum_distance = a.distance_to(*b);
@@ -44,9 +48,7 @@ pub fn find_minimum_in_strip<'a>(
 /// This will run in `O(n^2)` time, so it is only used for the base case of the recursive algorithm.
 /// # Panics
 /// Function will panic if the iterator is empty.
-pub fn find_minimum_bruteforce<'a>(
-    points: impl Iterator<Item = &'a Point> + Clone,
-) -> PointPair {
+pub fn find_minimum_bruteforce<'a>(points: impl Iterator<Item = &'a Point> + Clone) -> PointPair {
     points
         .combinations(2)
         .map(|x| PointPair(*x[0], *x[1]))

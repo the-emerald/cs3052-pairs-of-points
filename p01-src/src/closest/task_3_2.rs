@@ -54,7 +54,7 @@ fn find_closest_pair_inner(points: &mut [Point]) -> PointPair {
         &points[left_x_len..],
         &mut points_cpy,
     );
-    points.copy_from_slice(&points_cpy);    // memcpy
+    points.copy_from_slice(&points_cpy); // memcpy
 
     // Check invariant. All points should be sorted by y-coordinates
     debug_assert!((0..points.len() - 1).all(|i| points[i].y <= points[i + 1].y));

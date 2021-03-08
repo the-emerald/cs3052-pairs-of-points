@@ -1,13 +1,13 @@
 use closest_pairs::closest::task_1::Task1;
 use closest_pairs::closest::task_3_1::Task3QuickSort;
 use closest_pairs::closest::task_3_2::Task3SortedY;
+use closest_pairs::closest::task_4::Task4;
 use closest_pairs::geometry::Point;
 use closest_pairs::quick_select::quick_select_points;
 use criterion::{black_box, criterion_group, criterion_main, BatchSize, BenchmarkId, Criterion};
 use itertools::Itertools;
 use rand::prelude::*;
 use std::time::Duration;
-use closest_pairs::closest::task_4::Task4;
 
 const FACTOR: f32 = 1.5;
 

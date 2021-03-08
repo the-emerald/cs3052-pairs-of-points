@@ -57,7 +57,6 @@ fn quick_select_points_inner(mut points: &mut [Point], mut position: usize) {
 /// elements larger than it are on the right, and all elements smaller than it are on the left.
 pub fn quick_select_points(points: &mut [Point], position: usize) -> (&mut [Point], &mut [Point]) {
     quick_select_points_inner(points, position);
-
     points.split_at_mut(position)
 }
 
