@@ -62,8 +62,9 @@ impl Mesh {
         let closest = self
             .get_neighbours_of_mesh(point_mp)
             .iter()
-            .flat_map(|p| self.mesh.get(p).cloned().unwrap_or_default())
-            .filter(|&p| p != point)
+            .flat_map(|p| self.mesh.get(p))
+            .flatten()
+            .filter(|p| **p != point)
             .min_by(|a, b| {
                 a.distance_to(point)
                     .0
@@ -71,7 +72,7 @@ impl Mesh {
                     .unwrap()
             });
 
-        closest.map(|p| PointPair(point, p))
+        closest.map(|p| PointPair(point, *p))
     }
 
     /// Checks whether a neighbourhood is populated, given a single mesh.
@@ -79,7 +80,7 @@ impl Mesh {
         if self
             .get_neighbours_of_mesh(point_mp)
             .iter()
-            .map(|p| self.mesh.get(p).cloned().unwrap_or_default())
+            .flat_map(|p| self.mesh.get(p))
             .any(|hs| hs.len() > 1)
         {
             PointsInNeighbour::Yes
