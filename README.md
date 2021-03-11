@@ -36,7 +36,7 @@ values in `p01-src/benches/benchmarks.rs` under the `criterion_group!` macro, `c
 To generate a flamegraph, you will need `perf` installed on Linux alongside the
 appropriate permissions. Install:
 
-`cargo install cargo-flamegraph`
+`cargo install flamegraph`
 
 and then run `cargo flamegraph -o [output_filename.svg] --bin=[cp1/cp3/cp4]`.
 
