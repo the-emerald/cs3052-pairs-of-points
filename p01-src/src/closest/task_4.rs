@@ -1,6 +1,6 @@
 use crate::geometry::{Distance, Point, PointPair};
-use rand::prelude::*;
 use fnv::FnvHashMap;
+use rand::prelude::*;
 
 /// A single mesh, indexed by its position along the `x` and `y` axis.
 #[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]
@@ -74,33 +74,6 @@ impl Mesh {
 
         closest.map(|p| PointPair(point, *p))
     }
-
-    // pub fn resize_into(&mut self, new_size: f64) {
-    //     let new_points = self.mesh.iter()
-    //         .flat_map(|(&a, b)| {
-    //             b.iter().map(move |&c| {
-    //                 (a, MeshPoint {
-    //                     xth: (c.x / new_size).floor() as isize,
-    //                     yth: (c.y / new_size).floor() as isize,
-    //                 }, c)
-    //             })
-    //         })
-    //         .collect::<Vec<(MeshPoint, MeshPoint, Point)>>();
-    //
-    //     for (old_mesh_point, new_mesh_point, point) in new_points {
-    //         // Remove existing
-    //         {
-    //             let e = self.mesh.get_mut(&old_mesh_point).unwrap();
-    //             let pos = e.iter().position(|&p| p == point).unwrap();
-    //             e.remove(pos);
-    //         }
-    //         // Push into new
-    //         {
-    //             let n = self.mesh.entry(new_mesh_point).or_insert_with(Vec::new);
-    //             n.push(point);
-    //         }
-    //     }
-    // }
 
     /// Checks whether a neighbourhood is populated, given a single mesh.
     fn neighbour_is_populated(&self, point_mp: MeshPoint) -> PointsInNeighbour {
