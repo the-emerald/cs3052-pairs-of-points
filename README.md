@@ -1,5 +1,9 @@
 # CS3052 - Practical 1
 
+## Interactive benchmark report
+An interactive HTML page of performance benchmarks (along with
+detailed statistical tests)
+
 ## Installing Rust
 https://rustup.rs/ will provide instructions depending on your OS.
 
@@ -15,6 +19,8 @@ out the test).
 To run any of the executables as defined by the spec:
 
 `cargo run --release --bin=[cp1/cp3/cp4]`
+
+They can also be found in `targets/release`.
 
 ## Collecting data
 `criterion` (mainly), and a host of other tools are used to gather the results on
@@ -32,9 +38,13 @@ at `p01-src/target/criterion/reports`.
 *Note: these tests may take longer than expected to run on a slow machine! Adjust 
 values in `p01-src/benches/benchmarks.rs` under the `criterion_group!` macro, `config`.*
 
+*For a slower machine I recommend a 1 second warmup time and 5 seconds of measurement,
+though obviously data quality will suffer as a result.*
+
 ### Flamegraph
 To generate a flamegraph, you will need `perf` installed on Linux alongside the
-appropriate permissions. Install:
+appropriate permissions. Modify `Cargo.toml` so that the binaries have debug
+symbols (line 21). Install:
 
 `cargo install flamegraph`
 
@@ -50,10 +60,11 @@ Repeat the final command as necessary to run multiple executables at the same ti
 
 ## Multithreaded Task 4
 The report mentions a multithread-capable improvement on Task 4. You can find it on the
-`parallel` branch of this repository.
+`parallel` branch of this repository. It is not on the main branch because testing can be
+unfair due to different CPUs used in different machines.
 
 `git checkout parallel`
-`git checkout master`
+`cargo build && cargo build --release`
 
 `cp4` will spawn as many threads as the number of CPUs on the system.
 
